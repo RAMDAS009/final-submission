@@ -1,0 +1,16 @@
+.cardss {
+  height: 330px;
+  width: 400px;
+  box-shadow: 1px 1px 5px rgb(211, 210, 210);
+  border-radius: 20px;
+  margin: 20px;
+}
+.subtaskss {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  text-align: left;
+}
+.subtaskss input {
+  margin: 10px;
+}
