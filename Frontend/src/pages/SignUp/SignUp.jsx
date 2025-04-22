@@ -8,7 +8,6 @@ const SignUp = () => {
     password: "",
     role: "Student",
     rollNo: "",
-    projectGuide: "",
     projectName: "",
   });
 
@@ -28,10 +27,7 @@ const SignUp = () => {
         setError("Roll number is required for students");
         return;
       }
-      if (!formData.projectGuide) {
-        setError("Please select a project guide");
-        return;
-      }
+
       if (!formData.projectName.trim()) {
         setError("Project name is required");
         return;
@@ -46,7 +42,6 @@ const SignUp = () => {
         role: formData.role,
         ...(formData.role === "Student" && {
           rollNo: formData.rollNo,
-          projectGuide: formData.projectGuide,
           projectName: formData.projectName,
         }),
       };
