@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./StudentList.css";
 
 const StudentList = () => {
-  const students = [
-    { rollNo: 101, name: "Amit Sharma", project: "AI Chatbot" },
-    { rollNo: 102, name: "Priya Verma", project: "E-commerce Website" },
-    { rollNo: 103, name: "Rahul Gupta", project: "Student Management System" },
-    { rollNo: 104, name: "Sneha Patel", project: "IoT Smart Home" },
-    { rollNo: 105, name: "Vikram Singh", project: "Blockchain Voting System" },
-  ];
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/project/students", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setStudents(data.students);
+        } else {
+          console.error("Failed to fetch students");
+        }
+      })
+      .catch((err) => console.error("Error fetching students:", err));
+  }, []);
 
   return (
     <div className="container">
@@ -16,17 +25,17 @@ const StudentList = () => {
       <table>
         <thead>
           <tr>
-            <th>Roll No</th>
-            <th>Name</th>
+            <th>Username</th>
+            <th>Roll Number</th>
             <th>Project Name</th>
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
-            <tr key={student.rollNo}>
-              <td>{student.rollNo}</td>
-              <td>{student.name}</td>
-              <td>{student.project}</td>
+          {students.map((student, index) => (
+            <tr key={index}>
+              <td>{student.username}</td>
+              <td>{student.rollNo || "N/A"}</td>
+              <td>{student.projectName || "N/A"}</td>
             </tr>
           ))}
         </tbody>

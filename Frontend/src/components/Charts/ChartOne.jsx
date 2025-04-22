@@ -1,31 +1,23 @@
+import React, { useContext } from "react";
+import { SubmissionContext } from "../../context/SubmissionContext";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-const percentage = 50;
 const ChartOne = () => {
+  const { getProgress } = useContext(SubmissionContext);
+  const percentage = getProgress(); // Get the progress from context
+
   return (
     <div style={{ width: 150, height: 150, margin: 20 }}>
       <CircularProgressbar
         value={percentage}
-        text={`${percentage}%`}
+        text={`${percentage}%`} // ✅ Correct string interpolation
         styles={buildStyles({
-          // Rotation of path and trail, in number of turns (0-1)
           rotation: 0.25,
-          pathTransition: 0.5,
-          // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+          pathTransition: "stroke-dashoffset 0.5s ease 0s",
           strokeLinecap: "butt",
-
-          // Text size
           textSize: "16px",
-
-          // How long animation takes to go from one percentage to another, in seconds
-          pathTransitionDuration: 0.5,
-
-          // Can specify path transition in more detail, or remove it entirely
-          // pathTransition: 'none',
-
-          // Colors
-          pathColor: `rgba(62, 152, 199, ${percentage / 100})`,
+          pathColor: `rgba(62, 152, 199, ${percentage / 100})`, // ✅ Correct template literal
           textColor: "#C82333",
           trailColor: "#d6d6d6",
           backgroundColor: "#3e98c7",

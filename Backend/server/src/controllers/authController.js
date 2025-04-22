@@ -6,7 +6,7 @@ require("dotenv").config();
 
 // Signup function
 exports.signup = async (req, res) => {
-  const { username, password, role, projectName } = req.body;
+  const { username, password, role, projectName, rollNo } = req.body;
 
   if (!username || !password || !role) {
     return res.status(400).json({
@@ -42,6 +42,7 @@ exports.signup = async (req, res) => {
         username,
         password: hashedPassword,
         role,
+        rollNo,
         projectName,
       });
       await newStudent.save();

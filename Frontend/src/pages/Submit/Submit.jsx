@@ -3,18 +3,23 @@ import { SubmissionContext } from "../../context/SubmissionContext";
 import "./Submit.css";
 
 const Submit = () => {
-  const { submittedTasks } = useContext(SubmissionContext);
+  const { studentSubmissions } = useContext(SubmissionContext);
+
+  if (!Array.isArray(studentSubmissions) || studentSubmissions.length === 0) {
+    return <p>No submitted tasks available.</p>;
+  }
 
   return (
     <div>
-      {submittedTasks.map((task, index) => (
+      {studentSubmissions.map((task, index) => (
         <div className="cardss" key={index}>
           <div className="heading">
-            <h2>{task.title}</h2>
+            <h2>{task.project}</h2>
             <h3>{task.subtitle}</h3>
+            <p>Submission Date: {task.date}</p>
           </div>
           <div className="subtaskss">
-            <p>File uploaded for this task.</p>
+            <p>File: {task.file.name}</p>
           </div>
         </div>
       ))}

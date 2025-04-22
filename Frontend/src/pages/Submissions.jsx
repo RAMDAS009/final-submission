@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./Submissions.css";
 import { SubmissionContext } from "../context/SubmissionContext";
 
@@ -7,10 +7,22 @@ const Submissions = () => {
     useContext(SubmissionContext);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [comment, setComment] = useState("");
+  const [teacherName, setTeacherName] = useState("");
 
-  const handleAccept = (rollNo) => {
-    acceptSubmission(rollNo);
-    alert(`Submission accepted for Roll No: ${rollNo}`);
+  // Load teacher name from localStorage on component mount
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setTeacherName(storedUsername);
+    }
+  }, []);
+
+  const handleAccept = (submission) => {
+    const { rollNo, project, subtitle } = submission;
+    acceptSubmission(rollNo, project, subtitle);
+    alert(
+      `Submission accepted by ${teacherName} for ${submission.name} (${rollNo})`
+    );
   };
 
   const handleAddComment = (student) => {
@@ -24,8 +36,11 @@ const Submissions = () => {
       return;
     }
 
-    addReview(selectedStudent.rollNo, comment);
-    alert(`Review submitted for ${selectedStudent.name}: ${comment}`);
+    const { rollNo, project, subtitle } = selectedStudent;
+    addReview(rollNo, project, subtitle, comment);
+    alert(
+      `${teacherName}'s review submitted for ${selectedStudent.name}: ${comment}`
+    );
     setSelectedStudent(null);
   };
 
@@ -33,13 +48,20 @@ const Submissions = () => {
     setSelectedStudent(null);
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
+  const getStatusBadge = (submission) => {
+    switch (submission.status) {
       case "accepted":
-        return <span className="status-badge accepted">Accepted</span>;
+        return (
+          <span className="status-badge accepted">
+            Accepted by {teacherName || "Teacher"}: {submission.name} (
+            {submission.rollNo})
+          </span>
+        );
       case "needsRevision":
         return (
-          <span className="status-badge needs-revision">Needs Revision</span>
+          <span className="status-badge needs-revision">
+            Needs Revision (Reviewed by {teacherName || "Teacher"})
+          </span>
         );
       default:
         return <span className="status-badge pending">Pending Review</span>;
@@ -48,23 +70,21 @@ const Submissions = () => {
 
   return (
     <div className="submissions-container">
-      <h2>Student Submissions</h2>
+      <h2>Student Submissions - Reviewed by {teacherName || "Teacher"}</h2>
 
       {studentSubmissions.length === 0 ? (
         <p className="no-submissions">No submissions yet.</p>
       ) : (
         <div className="card-container">
-          {studentSubmissions.map((submission) => (
-            <div key={submission.rollNo} className="card">
-              <div className="card-header">
-                <h3>
-                  {submission.name} ({submission.rollNo})
-                  {getStatusBadge(submission.status)}
-                </h3>
-              </div>
+          {studentSubmissions.map((submission, index) => (
+            <div key={`${submission.rollNo}-${index}`} className="card">
+              <div className="card-header"></div>
               <div className="card-body">
                 <p>
                   <strong>Project:</strong> {submission.project}
+                </p>
+                <p>
+                  <strong>Task:</strong> {submission.subtitle}
                 </p>
                 <p>
                   <strong>Submitted On:</strong> {submission.date}
@@ -80,7 +100,7 @@ const Submissions = () => {
               <div className="button-group">
                 <button
                   className="accept-btn"
-                  onClick={() => handleAccept(submission.rollNo)}
+                  onClick={() => handleAccept(submission)}
                 >
                   Accept
                 </button>
@@ -99,9 +119,13 @@ const Submissions = () => {
       {selectedStudent && (
         <div className="popup-overlay">
           <div className="popup">
-            <h3>Review for {selectedStudent.name}</h3>
+            <h3>
+              {teacherName || "Teacher"}'s Review for {selectedStudent.name}
+            </h3>
             <textarea
-              placeholder="Write your review here..."
+              placeholder={`Write your review as ${
+                teacherName || "Teacher"
+              }...`}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={5}

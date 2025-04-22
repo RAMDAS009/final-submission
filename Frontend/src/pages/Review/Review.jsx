@@ -18,16 +18,23 @@ const Review = () => {
           {reviews.map((review, idx) => (
             <div className="review-card" key={idx}>
               <div className="review-header">
-                <span className="review-date">{review.date}</span>
+                <div>
+                  <strong>Project:</strong> {review.project}
+                </div>
+                <div>
+                  <strong>Task:</strong> {review.subtitle}
+                </div>
+              </div>
+
+              <div className="review-body">
+                <p className="review-comment">"{review.comment}"</p>
+              </div>
+
+              <div className="review-footer">
+                <span className="review-meta">Date: {review.date}</span>
                 <span className={`review-status ${review.status}`}>
-                  {review.status}
+                  {review.status === "needsRevision" ? "" : review.status}
                 </span>
-              </div>
-              <div className="review-content">
-                <p>{review.comment}</p>
-              </div>
-              <div className="review-meta">
-                <span className="reviewer">Review by: Teacher</span>
               </div>
             </div>
           ))}

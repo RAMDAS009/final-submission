@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Dashboard.css";
 import ChartOne from "../../components/Charts/ChartOne";
 import ChartTwo from "../../components/Charts/ChartTwo";
 import ChartThree from "../../components/Charts/ChartThree";
 import BarChart from "../../components/Charts/BarChart";
 import Calendar from "../../components/Charts/CalendarControl.jsx";
+import { SubmissionContext } from "../../context/SubmissionContext";
 
 const Dashboard = () => {
+  const { submittedCount, completedCount } = useContext(SubmissionContext); // ✅ include completedCount
+
   return (
     <div className="dash">
-      <div class="box box1">
+      <div className="box box1">
         <div className="text">
-          <h2>welcome to</h2>
+          <h2>Welcome to</h2>
           <h1>Your Task Management Area</h1>
         </div>
         <img
@@ -20,37 +23,42 @@ const Dashboard = () => {
           style={{ width: "460px", height: "240px" }}
         />
       </div>
-      <div class="box box2">
+
+      <div className="box box2">
         <div className="text-container">
           <h3>COMPLETED TASK</h3>
-          <h1>0</h1>
+          <h1>{completedCount}</h1> {/* ✅ Live count */}
         </div>
         <div className="pie-chart">
           <ChartOne />
         </div>
       </div>
-      <div class="box box3">
+
+      <div className="box box3">
         <div className="text-container">
           <h3>SUBMITTED TASK</h3>
-          <h1>0</h1>
+          <h1>{submittedCount}</h1>
         </div>
         <div className="pie-chart">
           <ChartTwo />
         </div>
       </div>
-      <div class="box box4">
+
+      <div className="box box4">
         <div className="text-container">
           <h3>PENDING TASK</h3>
-          <h1>4</h1>
+          <h1>{4 - submittedCount}</h1> {/* Optional: Dynamic pending */}
         </div>
         <div className="pie-chart">
           <ChartThree />
         </div>
       </div>
-      <div class="box box5">
+
+      <div className="box box5">
         <BarChart />
       </div>
-      <div class=" box6">
+
+      <div className="box6">
         <Calendar />
       </div>
     </div>

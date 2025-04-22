@@ -14,4 +14,6 @@ router.get("/home-student", projectController.homeStudent);
 // Route for home page for teacher (view students and guides)
 router.get("/home-teacher", projectController.homeTeacher);
 
+router.get("/students", projectController.getAllStudents);
+
 module.exports = router;

@@ -2,9 +2,12 @@ import React, { useContext, useState, useEffect } from "react";
 import { SubmissionContext } from "../../context/SubmissionContext";
 
 const UploadFile = ({ task }) => {
-  const { addSubmission } = useContext(SubmissionContext);
+  const { addSubmission, acceptSubmission, studentSubmissions } =
+    useContext(SubmissionContext);
+
   const [file, setFile] = useState(null);
   const [currentUser, setCurrentUser] = useState({ name: "", rollNo: "" });
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
@@ -17,25 +20,57 @@ const UploadFile = ({ task }) => {
     }
   }, []);
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
+    if (!file) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    if (!task?.title || !task?.subtitle) {
+      alert("Task information is incomplete.");
+      return;
+    }
+
+    const alreadySubmitted = studentSubmissions.some(
+      (submission) =>
+        submission.rollNo === currentUser.rollNo &&
+        submission.project === task.title &&
+        submission.subtitle === task.subtitle
+    );
+
+    if (alreadySubmitted) {
+      alert("You've already submitted this task.");
+      return;
+    }
+
+    setIsUploading(true);
+
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = (e) => {
       const base64File = e.target.result;
 
-      const submission = {
+      const newSubmission = {
         rollNo: currentUser.rollNo,
         name: currentUser.name,
-        project: task?.title || "Untitled Project",
+        project: task.title,
+        subtitle: task.subtitle,
         file: {
           name: file.name,
           data: base64File,
         },
         date: new Date().toISOString().split("T")[0],
+        status: "submitted",
       };
 
-      addSubmission(submission);
-      alert("File uploaded and submission sent!");
-      setFile(null);
+      // Add submission and accept it after slight delay
+      addSubmission(newSubmission);
+
+      setTimeout(() => {
+        acceptSubmission(currentUser.rollNo, task.title, task.subtitle);
+        alert("✅ File uploaded and submitted successfully!");
+        setFile(null);
+        setIsUploading(false);
+      }, 150);
     };
 
     reader.readAsDataURL(file);
@@ -45,10 +80,24 @@ const UploadFile = ({ task }) => {
     <div>
       <input
         type="file"
+        id="fileInput"
         onChange={(e) => setFile(e.target.files[0])}
         accept=".pdf,.doc,.docx,.txt"
+        disabled={isUploading}
+        style={{ display: "none" }} // hide default input
       />
-      <button onClick={handleUpload}>Upload</button>
+      <label
+        htmlFor="fileInput"
+        className={`custom-file-label ${isUploading ? "disabled" : ""}`}
+      >
+        Choose File
+      </label>
+
+      {file && <p>Selected: {file.name}</p>}
+
+      <button onClick={handleUpload} disabled={!file || isUploading}>
+        {isUploading ? "Uploading..." : "Upload"}
+      </button>
     </div>
   );
 };

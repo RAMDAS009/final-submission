@@ -36,3 +36,7 @@
 .subtasks input {
   margin: 10px;
 }
+.submit {
+  text-align: center;
+  padding-top: 25px;
+}

@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
-// Student Schema and Model (updated with department and projectName fields)
 const studentSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: "student" },
-  // department: { type: String, required: true },
+  department: { type: String },
+  rollNo: { type: String, required: true }, // ✅ Added rollNo field
   projectGuide: { type: String },
-  projectName: { type: String }, // New field to store project name
+  projectName: { type: String },
 });
+
 module.exports = mongoose.model("Student", studentSchema);

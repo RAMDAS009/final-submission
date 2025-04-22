@@ -21,20 +21,48 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Client-side validation for student role
+    if (formData.role === "Student") {
+      if (!formData.rollNo.trim()) {
+        setError("Roll number is required for students");
+        return;
+      }
+      if (!formData.projectGuide) {
+        setError("Please select a project guide");
+        return;
+      }
+      if (!formData.projectName.trim()) {
+        setError("Project name is required");
+        return;
+      }
+    }
+
     try {
+      // Prepare the data to send to backend
+      const requestBody = {
+        username: formData.username,
+        password: formData.password,
+        role: formData.role,
+        ...(formData.role === "Student" && {
+          rollNo: formData.rollNo,
+          projectGuide: formData.projectGuide,
+          projectName: formData.projectName,
+        }),
+      };
+
       const response = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        // ✅ Store in localStorage if role is Student
         if (formData.role === "Student") {
           const studentUser = {
             name: formData.username,
@@ -46,10 +74,10 @@ const SignUp = () => {
         alert("Signup successful! Please log in.");
         navigate("/login");
       } else {
-        setError(data.error || "Signup failed.");
+        setError(data.error || "Signup failed. Please try again.");
       }
     } catch (err) {
-      setError("Something went wrong.");
+      setError("Something went wrong. Please try again later.");
     }
   };
 
@@ -66,6 +94,8 @@ const SignUp = () => {
             value={formData.username}
             onChange={handleChange}
             required
+            pattern="[A-Za-z0-9]+"
+            title="Letters and numbers only"
           />
 
           <label htmlFor="password">Password</label>
@@ -90,7 +120,6 @@ const SignUp = () => {
             <option value="Teacher">Teacher</option>
           </select>
 
-          {/* 👇 Show these fields only for students */}
           {formData.role === "Student" && (
             <>
               <label htmlFor="rollNo">Roll Number</label>
@@ -101,9 +130,11 @@ const SignUp = () => {
                 value={formData.rollNo}
                 onChange={handleChange}
                 required
+                pattern="[A-Za-z0-9]+"
+                title="Letters and numbers only"
               />
 
-              <label htmlFor="projectGuide">Select Guide</label>
+              {/* <label htmlFor="projectGuide">Select Guide</label>
               <select
                 id="projectGuide"
                 name="projectGuide"
@@ -118,7 +149,7 @@ const SignUp = () => {
                 <option value="Guide B">Guide B</option>
                 <option value="Guide C">Guide C</option>
                 <option value="Guide D">Guide D</option>
-              </select>
+              </select> */}
 
               <label htmlFor="projectName">Project Name</label>
               <input
