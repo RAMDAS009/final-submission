@@ -26,16 +26,11 @@ const UploadFile = ({ task }) => {
       return;
     }
 
-    if (!task?.title || !task?.subtitle) {
-      alert("Task information is incomplete.");
-      return;
-    }
-
     const alreadySubmitted = studentSubmissions.some(
       (submission) =>
         submission.rollNo === currentUser.rollNo &&
-        submission.project === task.title &&
-        submission.subtitle === task.subtitle
+        submission.project === task?.title &&
+        submission.subtitle === task?.subtitle
     );
 
     if (alreadySubmitted) {
@@ -52,8 +47,8 @@ const UploadFile = ({ task }) => {
       const newSubmission = {
         rollNo: currentUser.rollNo,
         name: currentUser.name,
-        project: task.title,
-        subtitle: task.subtitle,
+        project: task?.title,
+        subtitle: task?.subtitle,
         file: {
           name: file.name,
           data: base64File,
@@ -62,11 +57,10 @@ const UploadFile = ({ task }) => {
         status: "submitted",
       };
 
-      // Add submission and accept it after slight delay
       addSubmission(newSubmission);
 
       setTimeout(() => {
-        acceptSubmission(currentUser.rollNo, task.title, task.subtitle);
+        acceptSubmission(currentUser.rollNo, task?.title, task?.subtitle);
         alert("✅ File uploaded and submitted successfully!");
         setFile(null);
         setIsUploading(false);
@@ -76,22 +70,19 @@ const UploadFile = ({ task }) => {
     reader.readAsDataURL(file);
   };
 
+  const inputId = `fileInput-${task?.id || Math.random()}`;
+
   return (
     <div>
       <input
         type="file"
-        id="fileInput"
+        id={inputId}
         onChange={(e) => setFile(e.target.files[0])}
         accept=".pdf,.doc,.docx,.txt"
         disabled={isUploading}
-        style={{ display: "none" }} // hide default input
+        style={{ display: "none" }}
       />
-      <label
-        htmlFor="fileInput"
-        className={`custom-file-label ${isUploading ? "disabled" : ""}`}
-      >
-        Choose File
-      </label>
+      <label htmlFor={inputId}>Choose File</label>
 
       {file && <p>Selected: {file.name}</p>}
 

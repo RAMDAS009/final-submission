@@ -1,54 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Task.css";
 import UploadFile from "../../components/UploadFile/UploadFile";
 
 const Task = () => {
-  // Initialize state with all checkboxes
-  const [checkboxes, setCheckboxes] = useState({
-    "task1-subtask1": false,
-    "task1-subtask2": false,
-    "task1-subtask3": false,
-    "task1-subtask4": false,
-    "task1-subtask5": false,
-    "task2-subtask1": false,
-    "task2-subtask2": false,
-    "task2-subtask3": false,
-    "task2-subtask4": false,
-    "task2-subtask5": false,
-    "task3-subtask1": false,
-    "task3-subtask2": false,
-    "task3-subtask3": false,
-    "task3-subtask4": false,
-    "task3-subtask5": false,
-    "task4-subtask1": false,
-    "task4-subtask2": false,
-    "task4-subtask3": false,
-    "task4-subtask4": false,
-    "task4-subtask5": false,
-    "task4-subtask6": false,
-  });
-
-  // Load saved checkboxes from localStorage on component mount
-  useEffect(() => {
-    const savedCheckboxes = localStorage.getItem("taskCheckboxes");
-    if (savedCheckboxes) {
-      setCheckboxes(JSON.parse(savedCheckboxes));
-    }
-  }, []);
-
-  // Save checkboxes to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("taskCheckboxes", JSON.stringify(checkboxes));
-  }, [checkboxes]);
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setCheckboxes((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
-  };
-
   return (
     <>
       <div className="cardContainer">
@@ -58,61 +12,29 @@ const Task = () => {
             <h3>INTRODUCTION</h3>
           </div>
           <div className="subtasks">
-            <label htmlFor="task1-subtask1">
-              <input
-                type="checkbox"
-                name="task1-subtask1"
-                id="task1-subtask1"
-                checked={checkboxes["task1-subtask1"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Background
             </label>
-            <label htmlFor="task1-subtask2">
-              <input
-                type="checkbox"
-                name="task1-subtask2"
-                id="task1-subtask2"
-                checked={checkboxes["task1-subtask2"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Objectives
             </label>
-            <label htmlFor="task1-subtask3">
-              <input
-                type="checkbox"
-                name="task1-subtask3"
-                id="task1-subtask3"
-                checked={checkboxes["task1-subtask3"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Purpose, Scope, and Applicability
             </label>
-            <label htmlFor="task1-subtask4">
-              <input
-                type="checkbox"
-                name="task1-subtask4"
-                id="task1-subtask4"
-                checked={checkboxes["task1-subtask4"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Achievements
             </label>
-            <label htmlFor="task1-subtask5">
-              <input
-                type="checkbox"
-                name="task1-subtask5"
-                id="task1-subtask5"
-                checked={checkboxes["task1-subtask5"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Organization report
             </label>
           </div>
           <div className="submit">
-            <UploadFile
-              task={{ id: 1, title: "TASK 1", subtitle: "INTRODUCTION" }}
-            />
+            <UploadFile />
           </div>
         </div>
         <div className="cards">
@@ -121,65 +43,29 @@ const Task = () => {
             <h3> SURVEY OF TECHNOLOGIES</h3>
           </div>
           <div className="subtasks">
-            <label htmlFor="task2-subtask1">
-              <input
-                type="checkbox"
-                name="task2-subtask1"
-                id="task2-subtask1"
-                checked={checkboxes["task2-subtask1"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               survey 1
             </label>
-            <label htmlFor="task2-subtask2">
-              <input
-                type="checkbox"
-                name="task2-subtask2"
-                id="task2-subtask2"
-                checked={checkboxes["task2-subtask2"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               survey 2
             </label>
-            <label htmlFor="task2-subtask3">
-              <input
-                type="checkbox"
-                name="task2-subtask3"
-                id="task2-subtask3"
-                checked={checkboxes["task2-subtask3"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               survey 3
             </label>
-            <label htmlFor="task2-subtask4">
-              <input
-                type="checkbox"
-                name="task2-subtask4"
-                id="task2-subtask4"
-                checked={checkboxes["task2-subtask4"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               survey 4
             </label>
-            <label htmlFor="task2-subtask5">
-              <input
-                type="checkbox"
-                name="task2-subtask5"
-                id="task2-subtask5"
-                checked={checkboxes["task2-subtask5"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               survey 5
             </label>
           </div>
           <div className="submit">
-            <UploadFile
-              task={{
-                id: 2,
-                title: "TASK 2",
-                subtitle: "SURVEY OF TECHNOLOGIES",
-              }}
-            />
+            <UploadFile />
           </div>
         </div>
 
@@ -189,61 +75,31 @@ const Task = () => {
             <h3> REQUIREMENTS AND ANALYSIS </h3>
           </div>
           <div className="subtasks">
-            <label htmlFor="task3-subtask1">
-              <input
-                type="checkbox"
-                name="task3-subtask1"
-                id="task3-subtask1"
-                checked={checkboxes["task3-subtask1"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Problem Definition
             </label>
-            <label htmlFor="task3-subtask2">
-              <input
-                type="checkbox"
-                name="task3-subtask2"
-                id="task3-subtask2"
-                checked={checkboxes["task3-subtask2"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Requirements Specification
             </label>
-            <label htmlFor="task3-subtask3">
-              <input
-                type="checkbox"
-                name="task3-subtask3"
-                id="task3-subtask3"
-                checked={checkboxes["task3-subtask3"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Planning and Scheduling
             </label>
-            <label htmlFor="task3-subtask4">
-              <input
-                type="checkbox"
-                name="task3-subtask4"
-                id="task3-subtask4"
-                checked={checkboxes["task3-subtask4"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Software and Hardware Requirements
             </label>
-            <label htmlFor="task3-subtask5">
-              <input
-                type="checkbox"
-                name="task3-subtask5"
-                id="task3-subtask5"
-                checked={checkboxes["task3-subtask5"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Conceptual Models
             </label>
           </div>
           <div className="submit">
             <UploadFile
               task={{
-                id: 3,
+                id: 2,
                 title: "TASK 3",
                 subtitle: "REQUIREMENTS AND ANALYSIS",
               }}
@@ -256,72 +112,36 @@ const Task = () => {
             <h3> SYSTEM DESIGN</h3>
           </div>
           <div className="subtasks">
-            <label htmlFor="task4-subtask1">
-              <input
-                type="checkbox"
-                name="task4-subtask1"
-                id="task4-subtask1"
-                checked={checkboxes["task4-subtask1"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Basic Modules
             </label>
-            <label htmlFor="task4-subtask2">
-              <input
-                type="checkbox"
-                name="task4-subtask2"
-                id="task4-subtask2"
-                checked={checkboxes["task4-subtask2"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Data Design
             </label>
-            <label htmlFor="task4-subtask3">
-              <input
-                type="checkbox"
-                name="task4-subtask3"
-                id="task4-subtask3"
-                checked={checkboxes["task4-subtask3"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Procedural Design
             </label>
-            <label htmlFor="task4-subtask4">
-              <input
-                type="checkbox"
-                name="task4-subtask4"
-                id="task4-subtask4"
-                checked={checkboxes["task4-subtask4"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               User interface design
             </label>
-            <label htmlFor="task4-subtask5">
-              <input
-                type="checkbox"
-                name="task4-subtask5"
-                id="task4-subtask5"
-                checked={checkboxes["task4-subtask5"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Security Issues
             </label>
-            <label htmlFor="task4-subtask6">
-              <input
-                type="checkbox"
-                name="task4-subtask6"
-                id="task4-subtask6"
-                checked={checkboxes["task4-subtask6"]}
-                onChange={handleCheckboxChange}
-              />
+            <label htmlFor="subtask1">
+              <input type="checkbox" name="subtask1" id="" />
               Test Cases Design
             </label>
           </div>
           <div className="submit">
             <UploadFile
               task={{
-                id: 4,
-                title: "TASK 4",
+                id: 2,
+                title: "TASK 3",
                 subtitle: "SYSTEM DESIGN",
               }}
             />

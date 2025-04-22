@@ -3,9 +3,34 @@ import React, { createContext, useEffect, useState } from "react";
 export const SubmissionContext = createContext();
 
 export const SubmissionProvider = ({ children }) => {
+  // ---------------- Student State ----------------
+  const [students, setStudents] = useState([]);
+
+  const fetchStudents = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/project/students", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStudents(data.students);
+      } else {
+        console.error("Failed to fetch students");
+      }
+    } catch (err) {
+      console.error("Error fetching students:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  // ---------------- Submission State ----------------
   const [studentSubmissions, setStudentSubmissions] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [totalSubmittedTasks, setTotalSubmittedTasks] = useState(0); // NEW
 
   useEffect(() => {
     const loadFromStorage = (key, setter) => {
@@ -16,6 +41,9 @@ export const SubmissionProvider = ({ children }) => {
     loadFromStorage("studentSubmissions", setStudentSubmissions);
     loadFromStorage("completedTasks", setCompletedTasks);
     loadFromStorage("studentReviews", setReviews);
+
+    const totalCount = localStorage.getItem("totalSubmittedTasks");
+    if (totalCount) setTotalSubmittedTasks(JSON.parse(totalCount));
   }, []);
 
   useEffect(() => {
@@ -23,15 +51,13 @@ export const SubmissionProvider = ({ children }) => {
       "studentSubmissions",
       JSON.stringify(studentSubmissions)
     );
-  }, [studentSubmissions]);
-
-  useEffect(() => {
     localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
-  }, [completedTasks]);
-
-  useEffect(() => {
     localStorage.setItem("studentReviews", JSON.stringify(reviews));
-  }, [reviews]);
+    localStorage.setItem(
+      "totalSubmittedTasks",
+      JSON.stringify(totalSubmittedTasks)
+    );
+  }, [studentSubmissions, completedTasks, reviews, totalSubmittedTasks]);
 
   const addSubmission = (submission) => {
     setStudentSubmissions((prev) => {
@@ -43,6 +69,7 @@ export const SubmissionProvider = ({ children }) => {
       );
 
       if (!exists) {
+        setTotalSubmittedTasks((prevCount) => prevCount + 1); // Count only new submissions
         return [
           ...prev,
           {
@@ -112,16 +139,14 @@ export const SubmissionProvider = ({ children }) => {
     }
   };
 
-  // Progress based on accepted tasks
   const getProgress = () => {
-    const totalTasks = 4;
+    const totalTasks = 4; // Set your total number of tasks here
     const completed = completedTasks.length;
     return Math.floor((completed / totalTasks) * 100);
   };
 
-  // Progress based on submitted tasks
   const getSubmissionProgress = () => {
-    const totalTasks = 4;
+    const totalTasks = 4; // Set your total number of tasks here
     const submitted = studentSubmissions.length;
     return Math.min(100, Math.floor((submitted / totalTasks) * 100));
   };
@@ -132,6 +157,11 @@ export const SubmissionProvider = ({ children }) => {
   return (
     <SubmissionContext.Provider
       value={{
+        // Students
+        students,
+        fetchStudents,
+
+        // Submissions
         studentSubmissions,
         addSubmission,
         reviews,
@@ -142,6 +172,7 @@ export const SubmissionProvider = ({ children }) => {
         getSubmissionProgress,
         submittedCount,
         completedCount,
+        totalSubmittedTasks, // <-- use this in your Dashboard
       }}
     >
       {children}
